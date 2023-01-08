@@ -1,17 +1,15 @@
 from flask import Flask
 import os
 import challonge
+import time
+
+# (http://api.challonge.com/v1). for Challonge docs
 
 # set creds:
 MyKey = os.environ['MyKey']
-# Tell pychallonge about your [CHALLONGE! API credentials](http://api.challonge.com/v1).
 challonge.set_credentials("TheMightyPong", MyKey)
 
-
-      
-
 app = Flask(__name__)
-
 
 @app.route('/')
 def index():
