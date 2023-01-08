@@ -1,12 +1,8 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template
 import os
 import challonge
 import time
 from threading import Thread
-
-global data_updated
-
-data_updated = False
 
 # (http://api.challonge.com/v1). for Challonge docs
 
@@ -14,17 +10,12 @@ data_updated = False
 MyKey = os.environ['MyKey']
 challonge.set_credentials("TheMightyPong", MyKey)
 
-
 app = Flask(__name__)
 # store the current state of the HTML page
 current_html = ''
 
-
-
 def update_html():
-  global current_html, data_updated 
-  data_updated = False
-
+  global current_html
   try:
     P1Name = 'Player 1'
     P2Name = 'Player 2'
@@ -56,17 +47,14 @@ def update_html():
       new_html = render_template('index.html', P1Name=P1Name, P2Name=P2Name)
       
     # update the HTML page if the new HTML is different from the old HTML
-      if new_html != current_html:
-        current_html = new_html
-        print("HTML updated")
-        data_updated = True
-        return current_html  # return the updated HTML
-        updatecheck()
-    
+    if new_html != current_html:
+      current_html = new_html
+      print('updating HTML')
+      return current_html  # return the updated HTML
+      
+      
   except Exception as e:
     print(e)
-
-  
 
 def update_html_loop():    
 # update the HTML page every 20 seconds
@@ -77,22 +65,11 @@ def update_html_loop():
 # start the update loop in a separate thread
 update_thread = Thread(target=update_html_loop)
 update_thread.start()
-    
+
 # start the Flask app and run the development web server
 @app.route('/')
 def index():
   print('Accessed index route')
   return current_html
-
-app.run(host='0.0.0.0', port=81)
-
-@app.route('update-check')
-def updatecheck():
-  print('Accessed update-check route')
-  global data_updated
-  update_status = {'data_updated': data_updated}
-  data_updated = False
-  return jsonify(update_status)
-  
 
 app.run(host='0.0.0.0', port=81)
