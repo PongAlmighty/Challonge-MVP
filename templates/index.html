@@ -13,5 +13,26 @@
       <div class="VersusText">Vs.</div>
       <div class="player">{{ P2Name }}</div>
     </div>
+  
+    <script>
+      function checkForUpdates() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            // parse the response from the server
+            var response = JSON.parse(this.responseText);
+            // if the data has been updated, refresh the page
+            if (response.data_updated) {
+              refreshPage();
+            }
+          }
+        };
+        xhttp.open("GET", "update-check", true);
+        xhttp.send();
+      }
+      // check for updates every 5 seconds
+      setInterval(checkForUpdates, 5000);
+    </script>  
   </body>
+  
 </html>
