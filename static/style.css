@@ -1,0 +1,10 @@
+.player {
+  font-size: 18px;
+  color: #ff00ff;
+}
+
+.match {
+  color: #ff0000;
+  font-size: 44px;
+  font-weight: bold;
+}
