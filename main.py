@@ -3,6 +3,7 @@ import os
 import challonge
 import time
 from threading import Thread
+from flask_cors import CORS
 
 # (http://api.challonge.com/v1). for Challonge docs
 
@@ -11,6 +12,7 @@ MyKey = os.environ['MyKey']
 challonge.set_credentials("TheMightyPong", MyKey)
 
 app = Flask(__name__)
+CORS(app)
 # store the current state of the HTML page
 current_html = ''
 
@@ -78,4 +80,12 @@ def index():
   return current_html
 
 
-app.run(host='0.0.0.0', port=81)
+@app.route('/update-check')
+def update_check():
+  global data_updated
+  update_status = {'data_updated': data_updated}
+  data_updated = False
+  return jsonify(update_status)
+
+
+app.run(host='0.0.0.0', port=80)
