@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 import os
 import challonge
 import time
@@ -16,9 +16,11 @@ CORS(app)
 # store the current state of the HTML page
 current_html = ''
 
+global data_updated
+data_updated = int(time.time())
 
 def update_html():
-  global current_html
+  global current_html, data_updated
   try:
     P1Name = 'Player 1'
     P2Name = 'Player 2'
@@ -49,14 +51,15 @@ def update_html():
 
     # format the HTML output using CSS styles
     with app.app_context():
-      new_html = render_template('index.html', P1Name=P1Name, P2Name=P2Name)
+      new_html = render_template('index.html', P1Name=P1Name, P2Name=P2Name, currenttime=int(time.time()))
 
     # update the HTML page if the new HTML is different from the old HTML
     if new_html != current_html:
       current_html = new_html
+      data_updated = int(time.time())
       print('updating HTML')
       return current_html  # return the updated HTML
-
+      
   except Exception as e:
     print(e)
 
@@ -84,8 +87,7 @@ def index():
 def update_check():
   global data_updated
   update_status = {'data_updated': data_updated}
-  data_updated = False
   return jsonify(update_status)
 
 
-app.run(host='0.0.0.0', port=80)
+app.run(host='0.0.0.0')
