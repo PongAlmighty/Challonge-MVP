@@ -1,0 +1,12 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+  </head>
+  <body>
+  <div class="match">
+      
+   {% for key, value in parent_list.items() %}
+      {{key}}: {{value.wins}} {{value.losses}}<br>
+   {% endfor %}
+    </div>
+  </body>
