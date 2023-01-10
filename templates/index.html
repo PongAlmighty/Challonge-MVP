@@ -1,51 +1,11 @@
 <html>
   <head>
-    
+    <title>imanginative title</title>
     <link rel="stylesheet" type="text/css" href="/static/style.css">
-    <script src="/static/refresh.js"></script>
-    <script>
-      var lastupdate = {{ currenttime }};
-      function checkForUpdates() {
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-          if (this.readyState == 4 && this.status == 200) {
-            // parse the response from the server
-            var response = JSON.parse(this.responseText);
-            // if the data has been updated, refresh the page
-            if (response.data_updated > lastupdate) {
-              //refreshPage();
-              lastupdate = response.data_updated;
-              updateNames();
-            }
-          }
-        };
-        xhttp.open("GET", "https://Challonge-MVP.themightypong.repl.co/update-check", true);
-        xhttp.send();
-      }
-
-      function updateNames() {
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-          if (this.readyState == 4 && this.status == 200) {
-            // parse the response from the server
-            var response = this.responseText;
-            var board = document.getElementById('divmatch');
-            board.innerHTML = response;
-          }
-        };
-        xhttp.open("GET", "https://Challonge-MVP.themightypong.repl.co/versus_data", true);
-        xhttp.send();
-      }
-      // check for updates every 5 seconds
-      setInterval(checkForUpdates, 5000);
-    </script>  
   </head>
   <body>
-    <div class="match" id="divmatch">
-      <div class="player">{{ P1Name }}</div>
-      <div class="VersusText">Vs.</div>
-      <div class="player">{{ P2Name }}</div>
-    </div>
+    <a href="/versus">versus screen</a><br>
+    <a href="/leaderboard">leaderboard</a>
   
     
   </body>
