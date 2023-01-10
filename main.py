@@ -4,6 +4,9 @@ import challonge
 import time
 from threading import Thread
 from flask_cors import CORS
+import collections
+import versus
+import leaderboard
 
 # (http://api.challonge.com/v1). for Challonge docs
 
@@ -13,77 +16,82 @@ challonge.set_credentials("TheMightyPong", MyKey)
 
 app = Flask(__name__)
 CORS(app)
-# store the current state of the HTML page
-current_html = ''
 
-global data_updated
+
+tournament = challonge.tournaments.show('z57xc9')
+participants = challonge.participants.index(tournament["id"])
+matches = challonge.matches.index(tournament["id"])
 data_updated = int(time.time())
+last_update = tournament["updated_at"]
 
-def update_html():
-  global current_html, data_updated
-  try:
-    P1Name = 'Player 1'
-    P2Name = 'Player 2'
-
-    # Retrieve a tournament by its id (or its url).
-    tournament = challonge.tournaments.show('z57xc9')
-    participants = challonge.participants.index(tournament["id"])
-    matches = challonge.matches.index(tournament["id"])
-
-    # get list of open matches
-    for match in matches:
-      if match["state"] == "open":
-        if match["underway_at"] is not None:
-          #print(match["id"])
-          #print(match)
-          Player1ID = int(match['player1_id'])
-          Player2ID = int(match['player2_id'])
-          #get player names
-          Player1Info = challonge.participants.show(tournament["id"],
-                                                    Player1ID)
-          Player1Name = Player1Info['name']
-
-          Player2Info = challonge.participants.show(tournament["id"],
-                                                    Player2ID)
-          Player2Name = Player2Info['name']
-          P1Name = (Player1Name)
-          P2Name = (Player2Name)
-
-    # format the HTML output using CSS styles
-    with app.app_context():
-      new_html = render_template('index.html', P1Name=P1Name, P2Name=P2Name, currenttime=int(time.time()))
-
-    # update the HTML page if the new HTML is different from the old HTML
-    if new_html != current_html:
-      current_html = new_html
-      data_updated = int(time.time())
-      print('updating HTML')
-      return current_html  # return the updated HTML
-      
-  except Exception as e:
-    print(e)
+def index_html():
+  return render_template('index.html')
 
 
-def update_html_loop():
+def update_loop():
+  global last_update, data_updated, torunament, participants, matches
   # update the HTML page every 20 seconds
   while True:
-    update_html()
-    time.sleep(20)
+    try:
+      print("refresh global var data")
+      # Retrieve a tournament by its id (or its url).
+      tournament = challonge.tournaments.show('z57xc9')
+      participants = challonge.participants.index(tournament["id"])
+      matches = challonge.matches.index(tournament["id"])
+
+      # check if there has been any updates
+      if tournament["updated_at"] > last_update:
+        last_update = tournament["updated_at"]
+        data_updated = int(time.time())
+      for match in matches:
+        if match["updated_at"] > last_update:
+          last_update = match["updated_at"]
+          data_updated = int(time.time())
+        
+      
+    except Exception as e:
+      print(e)
+    time.sleep(5)
 
 
 # start the update loop in a separate thread
-update_thread = Thread(target=update_html_loop)
+update_thread = Thread(target=update_loop)
 update_thread.start()
 
 
 # start the Flask app and run the development web server
 @app.route('/')
 def index():
-  print('Accessed index route')
-  return current_html
+  print('Accessed index')
+  return index_html()
 
+@app.route('/leaderboard')
+def leaderout():
+  print('Accessing Leaderboard index')
+  return leaderboard.leaderboard(app, tournament, participants, matches)
 
-@app.route('/update-check')
+@app.route('/leaderboard_data')
+def leaderdataout():
+  print('Updating Leaderboard data')
+  return leaderboard.leaderboard_data(app, tournament, participants, matches)
+
+@app.route('/leader_check')
+def leader_check():
+  global data_updated
+  update_status = {'data_updated': data_updated}
+  return jsonify(update_status)
+
+@app.route('/versus')
+def versusscreen():
+  print('sending versus screen')
+  return versus.versus(app, tournament, participants, matches)
+
+@app.route('/versus_data')
+def vdout():
+  print('sending versus screen data')
+  return versus.versus_data(app, tournament, participants, matches)
+
+@app.route('/update_check')
 def update_check():
   global data_updated
   update_status = {'data_updated': data_updated}
