@@ -1,11 +1,6 @@
-
-# this page is not the most recent one. 
+# this page is not the most recent one.
 # Go here instead: https://replit.com/@TheMightyPong/Challonge-Query-Tester#main.py
 # going to leave this here as a reference but otherwise, kinda pointless.
-
-
-
-
 
 import os
 
@@ -37,10 +32,14 @@ print(len(participants))  # 13
 tournament = challonge.tournaments.show(tournament["id"])
 print(tournament["started_at"])  # 2011-07-31 16:16:02-04:00
 
+
 def player_name(participants, id):
   for parti in participants:
     if parti['id'] == id:
       return parti['name']
 
+
 for match in matches:
-  print(match["state"], player_name(participants, match["player1_id"]), player_name(participants, match["player2_id"]))
+  print(match["state"], player_name(participants, match["player1_id"]),
+        player_name(participants, match["player2_id"]),
+        ("winner: ", player_name(participants, match["winner_id"])))

@@ -32,7 +32,7 @@
             board.innerHTML = response;
           }
         };
-        xhttp.open("GET", "https://Challonge-MVP.themightypong.repl.co/versus_data", true);
+        xhttp.open("GET", "https://Challonge-MVP.themightypong.repl.co/versus", true);
         xhttp.send();
       }
       // check for updates every 5 seconds
@@ -42,7 +42,7 @@
   <body>
     <div class="match" id="divmatch">
       <div class="player">{{ P1Name }}</div>
-      <div class="versusMarker">Vs.</div>
+      <div class="versusmarker">Vs.</div>
       <div class="player">{{ P2Name }}</div>
     </div>
   

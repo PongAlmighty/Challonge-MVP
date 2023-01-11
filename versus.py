@@ -30,7 +30,10 @@ def versus(app, tournament, participants, matches):
     # format the HTML output using CSS styles
     print("rendering vs data")
     with app.app_context():
-      new_html = render_template('versus.html', P1Name=P1Name, P2Name=P2Name, currenttime=int(time.time()))
+      new_html = render_template('versus.html',
+                                 P1Name=P1Name, 
+                                 P2Name=P2Name, 
+                                 currenttime=int(time.time()))
       return new_html  # return the updated HTML
   except Exception as e:
     print(e)
@@ -42,7 +45,10 @@ def versus_data(app, tournament, participants, matches):
     # format the HTML output using CSS styles
     print("rendering vs data")
     with app.app_context():
-      new_html = render_template('versus.html', P1Name=P1Name, P2Name=P2Name, currenttime=int(time.time()))
+      new_html = render_template('versus.html', 
+                                 P1Name=P1Name, 
+                                 P2Name=P2Name, 
+                                 currenttime=int(time.time()))
       return new_html  # return the updated HTML
   except Exception as e:
     print(e)
