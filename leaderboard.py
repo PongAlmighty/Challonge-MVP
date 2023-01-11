@@ -8,29 +8,34 @@ def leaderboard_records(tournament, participants, matches):
 
     # get list of open matches
     for match in matches:
-      if match["state"] != "open":
+      if match["state"] == "complete":
+      
         if match["underway_at"] is not None:
-	      # Create a defaultdict to store the win/loss records for each participant
+        # Create a defaultdict to store the win/loss records for each participant
           records = collections.defaultdict(lambda: {"wins": 0, "losses": 0})
 
-	      # Iterate through the list of matches and update the records for each participant
-        for match in matches:
-          player1_id = match["player1_id"]
-          player2_id = match["player2_id"]
-          winner_id = match["winner_id"]
-          # Find the names of the players in this match
-          player1_name = players.player_name(participants, player1_id)
-          player2_name = players.player_name(participants, player2_id)
-	        # Update the win/loss records for each player
-          if winner_id == player1_id:
-            # Player 1 won, so increment their win count and decrement player 2's loss count
-            records[player1_name]["wins"] += 1
-            records[player2_name]["losses"] += 1
-          else:
-            # Player 2 won, so increment their win count and decrement player 1's loss count
-            records[player2_name]["wins"] += 1
-            records[player1_name]["losses"] += 1
-
+          # Iterate through the list of matches and update the records for each participant
+          for match in matches:
+            if match["player1_id"] is not None and match["player2_id"] is not None:
+              player1_id = match["player1_id"]
+              player2_id = match["player2_id"]
+              winner_id = match["winner_id"]
+              # Find the names of the players in this match
+              player1_name = players.player_name(participants, player1_id)
+              player2_name = players.player_name(participants, player2_id)
+              # Update the win/loss records for each player
+              if winner_id == player1_id:
+                # Player 1 won, so increment their win count and decrement player 2's loss count
+                records[player1_name]["wins"] += 1
+                records[player2_name]["losses"] += 1
+              elif winner_id == player2_id:
+                # Player 2 won, so increment their win count and decrement player 1's loss count
+                records[player2_name]["wins"] += 1
+                records[player1_name]["losses"] += 1
+              else:
+                # Neither player won, so do nothing.
+                pass
+              
     return records
     
   except Exception as e:

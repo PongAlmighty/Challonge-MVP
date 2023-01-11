@@ -39,10 +39,10 @@
     </script>  
   </head>
   <body>
-  <div class="match" id="divboard">
+  <div class="LeaderboardText" id="divboard">
       
    {% for key, value in parent_list.items() %}
-      {{key}}: {{value.wins}} {{value.losses}}<br>
+      <div class="LeaderboardText">{{key}}: {{value.wins}} {{value.losses}}</div><br>
    {% endfor %}
     </div>
   </body>

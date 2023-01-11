@@ -7,8 +7,14 @@ body {
   color: #ff00ff;
 }
 
-.match {
+.VersusText {
   color: #ff0000;
   font-size: 44px;
+  font-weight: bold;
+}
+
+.LeaderboardText {
+  color: #000ff0;
+  font-size: 24px;
   font-weight: bold;
 }

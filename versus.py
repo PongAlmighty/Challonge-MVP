@@ -1,5 +1,4 @@
 from flask import render_template
-import challonge
 import time
 import players
 
@@ -11,12 +10,13 @@ def versus_players(tournament, participants, matches):
     # get list of open matches
     for match in matches:
       if match["state"] == "open":
-        Player1ID = int(match['player1_id'])
-        Player2ID = int(match['player2_id'])
-          
-        P1Name = players.player_name(participants, Player1ID)
-        P2Name = players.player_name(participants, Player2ID)
-        return P1Name, P2Name
+        if match["underway_at"] is not None:
+          Player1ID = int(match['player1_id'])
+          Player2ID = int(match['player2_id'])
+            
+          P1Name = players.player_name(participants, Player1ID)
+          P2Name = players.player_name(participants, Player2ID)
+    return P1Name, P2Name
           
   except Exception as e:
     print(e)
