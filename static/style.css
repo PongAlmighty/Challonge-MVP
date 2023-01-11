@@ -13,8 +13,24 @@ body {
   font-weight: bold;
 }
 
+.LeaderboardSpacing {
+  display: block;
+}
+
 .LeaderboardText {
   color: #000ff0;
   font-size: 24px;
+  font-weight: bold;
+}
+
+.LeaderboardNumbers {
+  color: #0f800f;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.LeaderboardSymbols {
+  color: #ffdd00;
+  font-size: 32px;
   font-weight: bold;
 }
