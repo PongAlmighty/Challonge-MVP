@@ -12,3 +12,8 @@ body {
   font-size: 44px;
   font-weight: bold;
 }
+
+.versusMarker {
+  font-size: 24px;
+  color: #000ff0;
+}

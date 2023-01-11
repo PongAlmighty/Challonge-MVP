@@ -10,15 +10,19 @@ import leaderboard
 
 # (http://api.challonge.com/v1). for Challonge docs
 
-# set creds:
+# Variables for the End User to fill out:
 MyKey = os.environ['MyKey']
 challonge.set_credentials("TheMightyPong", MyKey)
+tournament = challonge.tournaments.show('z57xc9')
+global updateTime # time in Seconds betweeen updates
+updateTime = 5
+
 
 app = Flask(__name__)
 CORS(app)
 
 
-tournament = challonge.tournaments.show('z57xc9')
+
 participants = challonge.participants.index(tournament["id"])
 matches = challonge.matches.index(tournament["id"])
 data_updated = int(time.time())
@@ -30,7 +34,7 @@ def index_html():
 
 def update_loop():
   global last_update, data_updated, torunament, participants, matches
-  # update the HTML page every 20 seconds
+  # update the Data every X seconds
   while True:
     try:
       print("refresh global var data")
@@ -51,7 +55,7 @@ def update_loop():
       
     except Exception as e:
       print(e)
-    time.sleep(5)
+    time.sleep(updateTime)
 
 
 # start the update loop in a separate thread
