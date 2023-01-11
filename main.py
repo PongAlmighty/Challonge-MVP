@@ -4,21 +4,21 @@ import challonge
 import time
 from threading import Thread
 from flask_cors import CORS
-import collections
 import versus
 import leaderboard
 
 # (http://api.challonge.com/v1). for Challonge docs
 
 # set creds:
-MyKey = os.environ['MyKey']
-challonge.set_credentials("TheMightyPong", MyKey)
+MyKey = os.environ['MyKey']  #<--- this needs changed to your API key
+MyName = "TheMightyPong"  #<--- this needs changed to your name
+TournID = 'z57xc9' #<--- this needs changed to your tournament ID
 
 app = Flask(__name__)
 CORS(app)
 
-
-tournament = challonge.tournaments.show('z57xc9')
+challonge.set_credentials(MyName, MyKey) #<--- Leave this alone
+tournament = challonge.tournaments.show(TournID)
 participants = challonge.participants.index(tournament["id"])
 matches = challonge.matches.index(tournament["id"])
 data_updated = int(time.time())
@@ -27,7 +27,6 @@ last_update = tournament["updated_at"]
 def index_html():
   return render_template('index.html')
 
-
 def update_loop():
   global last_update, data_updated, torunament, participants, matches
   # update the HTML page every 20 seconds
@@ -35,7 +34,7 @@ def update_loop():
     try:
       print("refresh global var data")
       # Retrieve a tournament by its id (or its url).
-      tournament = challonge.tournaments.show('z57xc9')
+      # tournament = challonge.tournaments.show(TournID)
       participants = challonge.participants.index(tournament["id"])
       matches = challonge.matches.index(tournament["id"])
 
